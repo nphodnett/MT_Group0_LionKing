@@ -1,10 +1,42 @@
+
+#include <Servo.h>
+
+// constants won't change
+const int BUTTON_PIN = 13; // Arduino pin connected to button's pin
+const int BELT_PIN  = 9; // Arduino pin connected to servo motor's pin
+
+Servo servo; // create servo object to control a servo
+
+// variables will change:
+int angle = 84
+;          // the current angle of servo motor
+int lastButtonState;    // the previous state of button
+int currentButtonState; // the current state of button
+
 void setup() {
-  // put your setup code here, to run once:
-  // NATHAN TEST
-  // CAMERON TEST EDIT
+  //Serial.begin(9600);                // initialize serial
+  pinMode(BUTTON_PIN, INPUT_PULLUP); // set arduino pin to input pull-up mode
+  servo.attach(BELT_PIN);           // attaches the servo on pin 9 to the servo object
+
+  servo.write(angle);
+  currentButtonState = digitalRead(BUTTON_PIN);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  lastButtonState    = currentButtonState;      // save the last state
+  currentButtonState = digitalRead(BUTTON_PIN); // read new state
 
+  if(lastButtonState == HIGH && currentButtonState == LOW) {
+    //Serial.println("The button is pressed");
+
+    // change angle of servo motor
+    if(angle == 0)
+      angle = 84;
+    else
+    if(angle == 84)
+      angle = 0;
+
+    // control servo motor arccoding to the angle
+    servo.write(angle);
+  }
 }
